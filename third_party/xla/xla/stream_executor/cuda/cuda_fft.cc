@@ -481,7 +481,9 @@ void initialize_cufft() {
 
             return new gpu::CUDAFft(cuda_executor);
           });
-  if (!status.ok()) {
+  if (status.ok()) {
+    LOG(INFO) << "cuFFT has been successfully registered";
+  } else if (status.message() != "Attempting to register factory for plugin cuFFT when one has already been registered") {
     LOG(ERROR) << "Unable to register cuFFT factory: " << status.message();
   }
 }

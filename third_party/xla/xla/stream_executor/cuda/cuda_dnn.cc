@@ -8450,7 +8450,9 @@ void initialize_cudnn() {
             return dnn;
           });
 
-  if (!status.ok()) {
+  if (status.ok()) {
+    LOG(INFO) << "cuDNN has been successfully registered";
+  } else if (status.message() != "Attempting to register factory for plugin cuDNN when one has already been registered") {
     LOG(ERROR) << "Unable to register cuDNN factory: " << status.message();
   }
 }

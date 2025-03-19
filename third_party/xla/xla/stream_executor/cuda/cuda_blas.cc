@@ -1448,7 +1448,9 @@ void initialize_cublas() {
             return blas;
           });
 
-  if (!status.ok()) {
+  if (status.ok()) {
+    LOG(INFO) << "cuBLAS has been successfully registered";
+  } else if (status.message() != "Attempting to register factory for plugin cuBLAS when one has already been registered") {
     LOG(ERROR) << "Unable to register cuBLAS factory: " << status.message();
   }
 }
