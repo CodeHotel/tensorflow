@@ -16,11 +16,11 @@ limitations under the License.
 #include "xla/codegen/math/rsqrt.h"
 
 #include <cstddef>
-#include <string>
 
 #include "absl/log/check.h"
 #include "absl/log/log.h"
-#include "absl/strings/ascii.h"
+#include "absl/status/status.h"
+#include "absl/status/statusor.h"
 #include "absl/strings/str_cat.h"
 #include "llvm/ADT/APInt.h"
 #include "llvm/IR/Argument.h"
@@ -38,17 +38,11 @@ limitations under the License.
 #include "llvm/IR/Value.h"
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/TypeSize.h"
+#include "xla/codegen/math/intrinsic.h"
 #include "xla/service/llvm_ir/llvm_util.h"
 #include "xla/xla_data.pb.h"
 
-namespace xla::codegen::math {
-
-std::string RsqrtFunctionName(size_t num_elements, PrimitiveType type) {
-  std::string vector_width =
-      num_elements > 1 ? absl::StrCat("v", num_elements, ".") : "";
-  return absl::StrCat("xla.rsqrt.", vector_width,
-                      absl::AsciiStrToLower(PrimitiveType_Name(type)));
-}
+namespace xla::codegen::intrinsics {
 
 static llvm::Value* NewtonRaphsonRsqrtIteration(llvm::IRBuilder<>& builder,
                                                 llvm::Value* x, llvm::Value* y,
@@ -135,7 +129,9 @@ struct RsqrtIntrinsic {
   }
 };
 
-llvm::Function* CreateRsqrtX86(llvm::Module* module, llvm::Type* input_type) {
+absl::StatusOr<llvm::Function*> Rsqrt::CreateDefinition(llvm::Module* module,
+                                                        Type type) {
+  llvm::Type* input_type = Type::TypeToIrType(type, module->getContext());
   CHECK(input_type != nullptr);
   CHECK(input_type->isFloatingPointTy() || input_type->isVectorTy());
   CHECK(input_type->getScalarType()->isFloatTy() ||
@@ -152,11 +148,7 @@ llvm::Function* CreateRsqrtX86(llvm::Module* module, llvm::Type* input_type) {
   llvm::FunctionType* function_type =
       llvm::FunctionType::get(input_type, {input_type}, false);
   llvm::Function* func = llvm::dyn_cast<llvm::Function>(
-      module
-          ->getOrInsertFunction(
-              RsqrtFunctionName(num_elements, llvm_ir::PrimitiveTypeFromIrType(
-                                                  input_type->getScalarType())),
-              function_type)
+      module->getOrInsertFunction(Rsqrt::Name(type), function_type)
           .getCallee());
 
   llvm::Argument* input_x_arg = func->getArg(0);
@@ -200,4 +192,4 @@ llvm::Function* CreateRsqrtX86(llvm::Module* module, llvm::Type* input_type) {
   return func;
 }
 
-}  // namespace xla::codegen::math
+}  // namespace xla::codegen::intrinsics

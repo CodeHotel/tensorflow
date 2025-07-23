@@ -160,18 +160,18 @@ def _tf_repositories():
     # LINT.IfChange(xnnpack)
     tf_http_archive(
         name = "XNNPACK",
-        sha256 = "44955ad1ef0ab8d2c658ae0ece05429729a17239c9b17ffcd16816212cd00e12",
-        strip_prefix = "XNNPACK-585e73e63cb35c8a416c83a48ca9ab79f7f7d45e",
-        urls = tf_mirror_urls("https://github.com/google/XNNPACK/archive/585e73e63cb35c8a416c83a48ca9ab79f7f7d45e.zip"),
+        sha256 = "70ff0edaaabd0092d0315c5da75572d36f70ea4c0d9c2e3d9c147f18bdd65fff",
+        strip_prefix = "XNNPACK-7566fefb2d5d035c9bb375f9aca5370a13a2b6c1",
+        urls = tf_mirror_urls("https://github.com/google/XNNPACK/archive/7566fefb2d5d035c9bb375f9aca5370a13a2b6c1.zip"),
     )
     # LINT.ThenChange(//tensorflow/lite/tools/cmake/modules/xnnpack.cmake)
 
     # XNNPack dependency.
     tf_http_archive(
         name = "KleidiAI",
-        sha256 = "439926527fca9405ae90b602a3938d3435751ec78492e5f1c62d85f5df8c2784",
-        strip_prefix = "kleidiai-dc69e899945c412a8ce39ccafd25139f743c60b1",
-        urls = tf_mirror_urls("https://github.com/ARM-software/kleidiai/archive/dc69e899945c412a8ce39ccafd25139f743c60b1.zip"),
+        sha256 = "b1ba8f690704a37f2ff924f98edfb3d3486a5d07142d0723dd22ff0c0391e2df",
+        strip_prefix = "kleidiai-f362d32fa5f8c8f36da487e13f5b59c911ce6b22",
+        urls = tf_mirror_urls("https://github.com/ARM-software/kleidiai/archive/f362d32fa5f8c8f36da487e13f5b59c911ce6b22.zip"),
     )
 
     tf_http_archive(
@@ -192,10 +192,10 @@ def _tf_repositories():
 
     tf_http_archive(
         name = "cpuinfo",
-        sha256 = "ae356c4c0c841e20711b5e111a1ccdec9c2f3c1dd7bde7cfba1bed18d6d02459",
-        strip_prefix = "cpuinfo-de0ce7c7251372892e53ce9bc891750d2c9a4fd8",
+        sha256 = "a074e612706113048f1bb2937e7af3c5b57a037ce048d3cfaaca2931575819d2",
+        strip_prefix = "cpuinfo-e4cadd02a8b386c38b84f0a19eddacec3f433baa",
         patch_file = ["//third_party/cpuinfo:cpuinfo_ppc64le_support.patch"],
-        urls = tf_mirror_urls("https://github.com/pytorch/cpuinfo/archive/de0ce7c7251372892e53ce9bc891750d2c9a4fd8.zip"),
+        urls = tf_mirror_urls("https://github.com/pytorch/cpuinfo/archive/e4cadd02a8b386c38b84f0a19eddacec3f433baa.zip"),
     )
 
     tf_http_archive(
@@ -359,10 +359,10 @@ def _tf_repositories():
     tf_http_archive(
         name = "org_sqlite",
         build_file = "//third_party:sqlite.BUILD",
-        sha256 = "bb5849ae4d7129c09d20596379a0b3f7b1ac59cf9998eba5ef283ea9b6c000a5",
-        strip_prefix = "sqlite-amalgamation-3430000",
+        sha256 = "9ad6d16cbc1df7cd55c8b55127c82a9bca5e9f287818de6dc87e04e73599d754",
+        strip_prefix = "sqlite-amalgamation-3500300",
         system_build_file = "//third_party/systemlibs:sqlite.BUILD",
-        urls = tf_mirror_urls("https://www.sqlite.org/2023/sqlite-amalgamation-3430000.zip"),
+        urls = tf_mirror_urls("https://www.sqlite.org/2025/sqlite-amalgamation-3500300.zip"),
     )
 
     tf_http_archive(
@@ -534,9 +534,9 @@ def _tf_repositories():
         name = "nccl_archive",
         build_file = "@local_xla//third_party:nccl/archive.BUILD",
         patch_file = ["@local_xla//third_party/nccl:archive.patch"],
-        sha256 = "7b154ad1f8ccafa795ed6696507d402b1b4ccac944c5fceb7f4e29b19a39cc47",
-        strip_prefix = "nccl-2.25.1-1",
-        urls = tf_mirror_urls("https://github.com/nvidia/nccl/archive/v2.25.1-1.tar.gz"),
+        sha256 = "0c5199ea56c70beb72a00eaf0d29887ac90243b47ebba048fba33ad86fcc2322",
+        strip_prefix = "nccl-2.26.5-1",
+        urls = tf_mirror_urls("https://github.com/nvidia/nccl/archive/v2.26.5-1.tar.gz"),
     )
 
     tf_http_archive(

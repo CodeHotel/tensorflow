@@ -584,7 +584,7 @@ class PjRtStreamExecutorBuffer : public CommonPjRtBuffer {
   using PjRtBuffer::ToLiteralSync;
   PjRtFuture<> ToLiteral(MutableLiteralBase* literal) override;
   PjRtFuture<> LazyToLiteral(
-      absl::AnyInvocable<absl::StatusOr<MutableLiteralBase*>() &&> generator)
+      absl::AnyInvocable<PjRtFuture<MutableLiteralBase*>() &&> generator)
       override;
 
   absl::StatusOr<size_t> GetOnDeviceSizeInBytes() const override;
@@ -672,6 +672,8 @@ class PjRtStreamExecutorBuffer : public CommonPjRtBuffer {
                      const TrackedDeviceBuffer& src_device_buffer);
   absl::StatusOr<std::unique_ptr<PjRtBuffer>> CopyToDeviceMemorySpace(
       PjRtDevice* dst_device, PjRtMemorySpace* dst_memory_space = nullptr);
+
+  PjRtFuture<> ToLiteralHelper(PjRtFuture<MutableLiteralBase*> literal);
 
   PjRtStreamExecutorClient* const client_;
   const Shape on_device_shape_;
@@ -777,19 +779,22 @@ class PjRtStreamExecutorLoadedExecutable : public PjRtLoadedExecutable {
   absl::StatusOr<std::vector<std::vector<std::unique_ptr<PjRtBuffer>>>> Execute(
       absl::Span<const std::vector<PjRtBuffer*>> argument_handles,
       const ExecuteOptions& options,
-      std::optional<std::vector<PjRtFuture<>>>& returned_futures) override;
+      std::optional<std::vector<PjRtFuture<>>>& returned_futures)
+      const override;
 
   using PjRtLoadedExecutable::ExecuteSharded;
   absl::StatusOr<std::vector<std::unique_ptr<PjRtBuffer>>> ExecuteSharded(
       absl::Span<PjRtBuffer* const> argument_handles, PjRtDevice* device,
       const ExecuteOptions& options,
-      std::optional<PjRtFuture<>>& returned_future, bool fill_future) override;
+      std::optional<PjRtFuture<>>& returned_future,
+      bool fill_future) const override;
 
   using PjRtLoadedExecutable::ExecutePortable;
   absl::StatusOr<std::vector<std::unique_ptr<PjRtBuffer>>> ExecutePortable(
       absl::Span<PjRtBuffer* const> argument_handles, PjRtDevice* device,
       const ExecuteOptions& options,
-      std::optional<PjRtFuture<>>& returned_future, bool fill_future) override;
+      std::optional<PjRtFuture<>>& returned_future,
+      bool fill_future) const override;
 
   void Delete() override { executables_.clear(); }
 

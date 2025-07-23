@@ -21,6 +21,7 @@ package(
     default_visibility = [
         "//tensorflow/compiler/tf2xla:internal",
         "//third_party/cloud_tpu/inference_converter:__subpackages__",
+        "//third_party/py/orbax:__subpackages__",
     ],
     licenses = ["notice"],
 )
@@ -37,6 +38,7 @@ check_deps(
 cc_library(
     name = "xla_ops",
     tags = ["optonly"],
+    visibility = ["//visibility:public"],
     deps = [
         ":aggregate_ops",
         ":all_reduce_op",

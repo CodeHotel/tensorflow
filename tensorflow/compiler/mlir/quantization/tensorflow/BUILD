@@ -233,6 +233,7 @@ cc_library(
     ],
     hdrs = ["passes/tf_quant_ops.h"],
     compatible_with = get_compatible_with_portable(),
+    visibility = ["//visibility:public"],
     deps = [
         "//tensorflow/compiler/mlir/tensorflow:tensorflow_attributes",
         "//tensorflow/compiler/mlir/tensorflow:tensorflow_op_interfaces",
@@ -409,6 +410,7 @@ cc_library(
         "quantize_preprocess.h",
     ],
     compatible_with = get_compatible_with_portable(),
+    visibility = ["//visibility:public"],
     deps = [
         ":passes",
         "//tensorflow/compiler/mlir/quantization/stablehlo:bridge_passes",
@@ -444,6 +446,7 @@ cc_library(
     srcs = ["quantize_passes.cc"],
     hdrs = ["quantize_passes.h"],
     compatible_with = get_compatible_with_portable(),
+    visibility = ["//visibility:public"],
     deps = [
         ":passes",
         ":quantization_options_proto_cc",
